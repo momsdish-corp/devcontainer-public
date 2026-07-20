@@ -7,10 +7,7 @@ set -Eeo pipefail
 
 start_dolt_server() {
     echo "Starting beads Dolt server..."
-    # post-start runs in a non-login shell, so put Homebrew (where bd/dolt live) on PATH
-    if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    fi
+    # bd is baked into the prebuilt image at /usr/local/bin
     if command -v bd &> /dev/null; then
         # bd auto-starts its managed dolt sql-server on demand; this just warms it up
         (cd /workspace && bd dolt start) || true

@@ -2,15 +2,15 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/debian
 {
 	"name": "Debian",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/base:trixie",
-	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached", 
+	// Prebuilt image with the tool set baked in (htmlq, pandoc, tmux, ripgrep,
+	// dolt, beads, Claude Code, Codex, node LTS via the node feature).
+	// Source: ./base-image/ — built and released nightly by
+	// .github/workflows/devcontainer-image.yml. Rebuilds reuse the locally
+	// cached image; `docker pull` this tag on the docker host, then rebuild,
+	// to pick up a newer release.
+	"image": "ghcr.io/momsdish-corp/devcontainer-public:latest",
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
 	"workspaceFolder": "/workspace",
-
-	// Set the default workspace folder
-	"features": {
-		"ghcr.io/devcontainers/features/node:1": {}
-	},
 
     // Inherit environment variables from host (see /etc/environment on host)
 	"containerEnv": {
@@ -27,7 +27,7 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				// Beads issue tracker UI (pairs with the bd CLI installed in post-create.sh)
+				// Beads issue tracker UI (pairs with the bd CLI baked into the prebuilt image)
 				"planet57.vscode-beads"
 			]
 		}

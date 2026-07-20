@@ -1,0 +1,14 @@
+// Build-only config: consumed by `devcontainer build` in
+// .github/workflows/devcontainer-image.yml to prebuild the image published to
+// ghcr.io/momsdish-corp/devcontainer-public. Not used to open a workspace —
+// the runtime config is ../devcontainer.json, which pulls the built image.
+{
+	"name": "Image build (CI only)",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	// Features listed here get baked into the published image
+	"features": {
+		"ghcr.io/devcontainers/features/node:1": {}
+	}
+}
