@@ -1,0 +1,55 @@
+# OS generated files
+Thumbs.db
+.DS_Store
+__MACOSX
+
+# Dependencies
+node_modules/
+vendor/
+.pnpm-store/
+
+# Common backup files
+*.swp
+*.bak
+*.tmp
+*.orig
+*~
+
+# IDEs
+.project
+.idea/
+*.tmproj
+.vscode/
+.aider*
+
+# Secrets
+.env
+.env.local
+.env.production
+
+# Temp folder (local dev storage, temp files)
+tmp/
+temp/
+
+# Build outputs
+dist/
+
+# Database (local dev)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Logs
+*.log
+
+# Memory Dumps (playwright)
+core.*
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+.beads-credential-key
+.beads/proxieddb/
+
+# Local Settings
+.claude/settings.local.json
