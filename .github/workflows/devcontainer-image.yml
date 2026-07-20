@@ -122,15 +122,25 @@ jobs:
           echo "tag=${tag}" >> "${GITHUB_OUTPUT}"
           echo "Release tag: ${tag}"
 
-      - name: Build and push image
+      # With `platform` set, devcontainers/ci does not push: it exports the
+      # multi-arch build to an OCI archive at /tmp/output.tar, to be pushed
+      # with skopeo (preinstalled on the runner, reuses docker login creds).
+      - name: Build image
         uses: devcontainers/ci@v0.3
         with:
           configFile: .devcontainer/base-image/devcontainer.json
           imageName: ${{ env.IMAGE }}
           imageTag: ${{ steps.tag.outputs.tag }}
           platform: linux/amd64,linux/arm64
-          push: always
+          push: never
           noCache: true
+
+      - name: Push image to GHCR
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          ls -la /tmp/output.tar
+          skopeo copy --all oci-archive:/tmp/output.tar "docker://${IMAGE}:${TAG}"
 
       - name: Smoke test (amd64)
         env:

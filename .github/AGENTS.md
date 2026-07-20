@@ -8,8 +8,9 @@ GitHub Actions configuration.
   rebuilds only when the computed upstream version manifest differs from the
   `versions.json` asset of the newest GitHub release; also rebuilds on pushes
   to main that touch the image definition, and on workflow_dispatch
-  (force=true rebuilds unconditionally). The `latest` tag is only moved after
-  the smoke test passes.
+  (force=true rebuilds unconditionally). Multi-platform builds are exported
+  to an OCI archive by devcontainers/ci and pushed with skopeo; the `latest`
+  tag is only moved after the smoke test passes.
 - `scripts/devcontainer-image-versions.sh` — computes the upstream version
   manifest (base image digest, node feature digest, node LTS, and tool
   versions from GitHub releases, crates.io, and Anthropic's release feed)
