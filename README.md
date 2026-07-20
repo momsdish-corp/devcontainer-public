@@ -1,2 +1,2 @@
 # devcontainer-public
-Devcontainer Base Template
+Devcontainer base template
