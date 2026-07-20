@@ -1,0 +1,2 @@
+# AGENTS.md
+Every working directory contains an AGENTS.md: directory's purpose, structure, and rules. Root AGENTS.md also covers project-wide details (stack, global rules). Update the affected AGENTS.md when its instructions become outdated or changed. Pair each AGENTS.md with a CLAUDE.md containing only: @AGENTS.md
