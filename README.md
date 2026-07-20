@@ -1,5 +1,8 @@
-# devcontainer-public
-Devcontainer base template
+# About
+This is the devcontainer base image, preconfigured with tools like
+node, claude code, codex, beads, htmlq, pandoc.
+
+For more information, see https://devcontainers.github.io/
 
 ## Prebuilt image
 
