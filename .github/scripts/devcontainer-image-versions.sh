@@ -32,8 +32,10 @@ manifest_digest() {
   if [[ -n "${token}" ]]; then
     args+=(-H "Authorization: Bearer ${token}")
   fi
+  # awk must consume the whole stream (no early exit): closing the pipe early
+  # SIGPIPEs the upstream writer, which pipefail turns into a spurious failure
   curl "${args[@]}" "https://${host}/v2/${repo}/manifests/${tag}" \
-    | tr -d '\r' | awk 'tolower($1) == "docker-content-digest:" { print $2; exit }'
+    | awk 'tolower($1) == "docker-content-digest:" && !found { found = 1; sub(/\r$/, "", $2); print $2 }'
 }
 
 # Anonymous pull token for a public GHCR repository. Args: repo
@@ -45,7 +47,7 @@ ghcr_token() {
 github_latest_tag() {
   local loc tag
   loc="$(curl -fsSI --retry 3 --retry-delay 2 --max-time 60 "https://github.com/$1/releases/latest" \
-    | tr -d '\r' | awk 'tolower($1) == "location:" { print $2; exit }')" || return 1
+    | awk 'tolower($1) == "location:" && !found { found = 1; sub(/\r$/, "", $2); print $2 }')" || return 1
   tag="${loc##*/}"
   [[ -n "${tag}" && "${tag}" != "releases" && "${tag}" != "latest" ]] || return 1
   printf '%s\n' "${tag}"

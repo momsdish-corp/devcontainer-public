@@ -52,7 +52,7 @@ RUN printf '%s\n' \
 # hadolint ignore=DL3008
 RUN apt-get update \
  && apt-get install -y --no-install-recommends tmux ripgrep \
- && loc="$(curl -fsSI https://github.com/jgm/pandoc/releases/latest | tr -d '\r' | awk 'tolower($1) == "location:" { print $2; exit }')" \
+ && loc="$(curl -fsSI https://github.com/jgm/pandoc/releases/latest | awk 'tolower($1) == "location:" && !found { found = 1; sub(/\r$/, "", $2); print $2 }')" \
  && ver="${loc##*/}" \
  && [ -n "${ver}" ] && [ "${ver}" != "releases" ] \
  && curl -fsSLo /tmp/pandoc.deb "https://github.com/jgm/pandoc/releases/download/${ver}/pandoc-${ver}-1-${TARGETARCH}.deb" \
@@ -65,7 +65,9 @@ RUN curl -fsSL https://github.com/dolthub/dolt/releases/latest/download/install.
 
 # beads (bd) — official release tarball with checksum verification, plus the
 # 'beads' alias the official installer creates
-RUN loc="$(curl -fsSI https://github.com/gastownhall/beads/releases/latest | tr -d '\r' | awk 'tolower($1) == "location:" { print $2; exit }')" \
+# awk consumes the whole stream (no early exit): an early close SIGPIPEs curl,
+# which `bash -o pipefail` turns into a spurious build failure
+RUN loc="$(curl -fsSI https://github.com/gastownhall/beads/releases/latest | awk 'tolower($1) == "location:" && !found { found = 1; sub(/\r$/, "", $2); print $2 }')" \
  && tag="${loc##*/}" \
  && [ -n "${tag}" ] && [ "${tag}" != "releases" ] \
  && archive="beads_${tag#v}_linux_${TARGETARCH}.tar.gz" \

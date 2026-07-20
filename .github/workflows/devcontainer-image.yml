@@ -35,6 +35,12 @@ concurrency:
   group: devcontainer-image
   cancel-in-progress: false
 
+# Explicit bash so run steps get `-o pipefail` (the default shell omits it,
+# which once let a failed versions script hide behind a successful `tee`)
+defaults:
+  run:
+    shell: bash
+
 env:
   IMAGE: ghcr.io/${{ github.repository }}
 
@@ -47,7 +53,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Compute upstream version manifest
-        run: .github/scripts/devcontainer-image-versions.sh | tee versions.json
+        run: |
+          .github/scripts/devcontainer-image-versions.sh | tee versions.json
+          jq -e .tools versions.json > /dev/null
 
       - name: Fetch manifest of newest release
         env:
