@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -Eeo pipefail
+
+#################
+### Functions ###
+#################
+
+start_dolt_server() {
+    echo "Starting beads Dolt server..."
+    # post-start runs in a non-login shell, so put Homebrew (where bd/dolt live) on PATH
+    if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    fi
+    if command -v bd &> /dev/null; then
+        # bd auto-starts its managed dolt sql-server on demand; this just warms it up
+        (cd /workspace && bd dolt start) || true
+    else
+        echo "bd not installed yet (post-create pending?) — skipping"
+    fi
+}
+
+##############
+### Script ###
+##############
+
+start_dolt_server
