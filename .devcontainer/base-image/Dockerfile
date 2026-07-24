@@ -33,9 +33,13 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Telemetry opt-outs: ENV covers every container process; /etc/environment
 # covers login shells that reset the environment.
-ENV DISABLE_TELEMETRY=1 \
-    DO_NOT_TRACK=1 \
-    CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
+# BUG @ref https://github.com/anthropics/claude-code/issues/76748
+# ENV DISABLE_TELEMETRY=1 \
+#     DO_NOT_TRACK=1 \
+#     CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
+#     CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY=1 \
+#     CLAUDE_CODE_ENABLE_FEEDBACK_SURVEY_FOR_OTEL=1
+ENV CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
     CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY=1 \
     CLAUDE_CODE_ENABLE_FEEDBACK_SURVEY_FOR_OTEL=1
 
